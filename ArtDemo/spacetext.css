@@ -1,0 +1,137 @@
+
+body
+{
+  background: #666;
+  font-family: monospaced;
+  color: #0F0;
+  
+}
+
+pre.asciiart {
+  position: absolute;
+  transform-origin: 0 0 0;
+  top:0;
+  left:0;
+  transform-style: preserve-3d;
+}
+
+
+#playframe
+{
+  width:100%;
+  height:100%;  
+  position: relative;
+  perspective-origin: 50% -0%;
+  perspective: 50em;
+  font-size: 80%;
+  overflow: hidden;
+  line-height: 80%;
+  margin:0;
+  transform-style: preserve-3d;
+  border: 1px solid black;
+  background: #000;
+}
+
+#playspace
+{
+  margin-left:auto;
+  margin-right:auto;
+  
+  
+  background: #111;
+  width: 60%;
+  height: 100%;  
+  position: relative;  
+  transform-style: preserve-3d;
+  transform:  rotateX(75deg);
+  transform-origin: 50% 50%;
+  perspective: 80em;  
+}
+
+#ground
+{
+  transform:  translateZ(0em); 
+  color: #880;
+  background-color: #200;  
+  overflow: hidden;
+  left: 40%; 
+  top: 0em;
+  transform-origin: 0 0 0;
+}
+
+#church
+{
+  background: rgba(100,0,0,.2);
+  color: #F00;
+  transform: rotateX(-90deg);
+  left: 30em; 
+  top: 0em;
+  overflow:hidden;
+  transform-origin: 0 100% 0;  
+}
+
+#church  span.white
+{
+  color:#FFF;
+}
+
+#sidewall
+{
+  color:#00A;
+  transform: rotateX(-90deg) rotateY(-90deg);
+  left: 80%; 
+  top: 0em;
+  overflow:hidden;
+  transform-origin: 0 100% 0;  
+}
+
+
+#sidewall2
+{
+  background: rgba(0,64,0,.5);
+  color: #0A0;
+  transform: rotateX(90deg) rotateY(90deg);
+  left: 10%; 
+  top: 0em;
+  overflow:hidden;
+  transform-origin: 0 0 0;  
+}
+
+#tree
+{
+  transform: rotateX(-90deg);
+  transform-origin: 50% 100%;
+  overflow: hidden;
+  left: 40em;
+  top: 20em;
+}
+
+#treeshadow
+{
+  color:#030;
+  overflow: hidden;
+  left: 40em;
+  top: 20em;
+}
+
+#planeshadow {
+  top: 40em;
+  left: 45em;  
+  transform:   translateZ(0em) ;
+  color: #660;
+  background: rgba(0,0,0,.5); 
+}
+
+#plane {
+  top: 40em;
+  left: 45em;  
+  transform:  translateZ(8em) ;
+  color: #07A;
+}
+
+#plane2 {
+  top: 40em;
+  left: 45em;  
+  transform:  translateZ(8.5em)  ;
+  
+}
