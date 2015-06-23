@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <title>ASCII Render</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1">
+	<link rel="stylesheet" type="text/css" href="textflight.css">
+  </head>
+  <body>
+  <h1>*******************</h1>
+  <div id=display>
+  </div>
+  <h1>****************** </h1>
+  
+  </body>
+  <script src="util.js"></script>  
+  <script src="asciiart.js"></script>  
+  <script>  
+  
+loadArtFromURL('art.html');
+document.getElementById('display').innerHTML=artLibrary.collection.church.asHTML;
+  
+  
+  
+  
+  </script>  
+  
+</html>

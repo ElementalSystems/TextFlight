@@ -1,0 +1,119 @@
+
+body
+{
+  background: #666;
+  font-family: monospaced;
+  color: #0F0;
+  overflow: hidden;
+}
+
+.asciiart {
+  position: absolute;
+  transform-origin: 0 0 0;
+  transform-style: preserve-3d;
+}
+
+
+#playframe
+{
+  width:100%;
+  height:100%;  
+  position: relative;
+  perspective-origin: 50% 40%;
+  perspective: 50em;
+  font-size: 80%;
+  overflow: visible;
+  transform-style: preserve-3d;
+  border: 1px solid black;
+  background: #000;
+  transform: rotateZ(0deg);
+}
+
+#playspace
+{
+  margin-left:auto;
+  margin-right:auto;
+  overflow: visible;
+  
+  
+  width: 100%;
+  height: 100%;  
+  position: relative;  
+  transform-style: preserve-3d;
+  transform:  rotateX(75deg);
+  transform-origin: 50% 50%;
+  
+}
+
+#ground
+{
+  transform:  translateZ(0em); 
+  color: #880;
+  background-color: #200;  
+  overflow: hidden;
+  left: 40%; 
+  top: 0em;
+  transform-origin: 0 0 0;
+}
+
+.church
+{
+  color: #0F0;
+}
+
+.normal_y
+{
+  transform-origin: 0 100% 0;  
+  transform: rotateX(-90deg);  
+}
+
+
+.normal_x
+{
+  transform: rotateX(-90deg) rotateY(90deg);  
+  transform-origin: 0 100% 0;  
+}
+
+.church span.solid
+{
+  background: rgba(0,200,0,.3);
+}
+.church span.mark_a
+{
+  color: #080;
+}
+
+.church span.mark_b
+{
+  color: #FF0;
+}
+
+.build1
+{
+  color: #00F;  
+}
+
+.floor
+{
+  bottom:0em;
+  color: #420;
+  background: #200;
+}
+
+
+.floor span.mark_a
+{
+ color: #A80;
+ 
+}
+
+.playercraft
+{
+  color: #FFF;
+  transform: translateZ(2em);
+}
+
+.playercraft span.solid
+{
+   background: rgba(128,128,128,.5);  
+}
