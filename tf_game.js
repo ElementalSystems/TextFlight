@@ -3,20 +3,26 @@
 
 var game= {
 	playspace: document.getElementById('playspace'),
+	progressindicator: document.getElementById('progressindicator'),
+	damageindicator: document.getElementById('damageindicator'),
+	audioCtx: new (window.AudioContext || window.webkitAudioContext)(),
+  
 	contents: [],
 	backmost_y: 0,
+	damagetaken: 0,
 	xoffset: 50,
 	xcenter: 50,
 	yoffset: 0,	
 	yextra:  0,
 	frameNumber: 0,		
+	courselength: 2000,
 	lastzindex: 10000,
 	
 	addSection: function(sectionText,xoff,yoff) {
        var section=jsonParseWithInitiator(sectionText);
        for (var i=0;i<section.content.length;i+=1) {
            section.content[i].addToGame(this,xoff,yoff);		   		   
-		   if (section.content[i].ye>this.backmost_y) this.backmost_y=section.content[i].ye;		   
+		   if ((section.content[i].art.normal=='z')&&(section.content[i].ye>this.backmost_y)) this.backmost_y=section.content[i].ye;		   
 	   }
 	   this.nextextendtype=section.extendtype;
     },
@@ -35,6 +41,8 @@ var game= {
       this.frameStart=timestamp;		
 	  this.killist=[];
 	  
+	  if (this.contents.length==0) return;
+	  
 	  for (var i=0;i<this.contents.length;i+=1) 
 		 if (this.contents[i].tick) this.contents[i].tick();
 	  
@@ -50,6 +58,8 @@ var game= {
 		 if (this.contents[i].y+this.yoffset<-50) this.killist.push(this.contents[i]);
 	  }
 	  
+	  
+	  
 	  //kill any items due for removal
 	  for (var i=0;i<this.killist.length;i+=1) {
 		 var ind=this.contents.indexOf(this.killist[i]);
@@ -61,7 +71,22 @@ var game= {
 	  //think we need more stuff?
 	  if (this.backmost_y+this.yoffset<200)
 		  this.addTerrain();
-	  	 	   
+	  
+	  //Reset the progress controls
+	  if (this.progressindicator) {
+		  var progress=-this.yoffset*100/this.courselength;
+		  this.speedFactor=1+progress/100;
+		  var val=progress.toFixed(1);
+		  if (val.length<4) val="0"+val;
+		  this.progressindicator.innerHTML=val;
+		  val=this.damagetaken.toFixed(1);
+		  if (val.length<4) val="0"+val;		  
+          this.damageindicator.innerHTML=val;          		  
+	  }
+
+	  if (this.damagetaken>100) endGame(false);
+	  if (-this.yoffset>this.courselength) endGame(true);
+	  	  
  	},
 	
 	init: function() {
@@ -84,6 +109,12 @@ var game= {
         this.contents=[]
 		this.frameNumber=0;
 		this.backmost_y=0;
+		this.damagetaken=0;
+	    this.speedFactor=1;
+	   
+       if (!this.noFocus)
+	     this.playspace.focus();
+	   
 	},
 	
 	addTerrain: function()
@@ -109,7 +140,12 @@ function start()
 {
   game.init();
   window.requestAnimationFrame(gameTick);	
-  
+  var title=document.getElementById('startmenutitle');
+  if (title) {
+	  var text=artLibrary.collection['startmenutitledisplay'].asHTML;
+	  title.innerHTML=text;
+  }
+    
 }
    
 function gameTick(timestamp) 

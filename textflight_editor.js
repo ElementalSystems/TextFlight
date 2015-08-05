@@ -1,8 +1,8 @@
 
 loadArtFromURL('art.html');
+loadArtFromURL('art_tut.html');
+loadArtFromURL('art_jet.html');
 loadSectionsFromURL('sections.html');
-
-
 
 
 function editorUpdate()
@@ -16,8 +16,11 @@ function editorUpdate()
 		sectionText="";
 		document.getElementById('parseStatus').innerHTML=e.message;
 	}
+	game.noFocus=true;
 	game.clearContent();
 	game.addSection(sectionLibrary.getById('start1'),0,game.backmost_y);
+	game.courselength=10000;
+	game.damagetaken=-100000;
 	addcount=0;
 }
 

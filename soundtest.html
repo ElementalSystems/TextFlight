@@ -1,0 +1,52 @@
+<html>
+  <head>
+    <title>Sound test</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+    <link rel="stylesheet" type="text/css" href="ftwist.css">
+  <script>
+  
+  note={
+    "aeaa",
+	" c  "
+  };
+  alert('hiya');
+  //set up the sound
+  var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  var oscillator = audioCtx.createOscillator();
+  var oscillator2 = audioCtx.createOscillator();
+  var gainNode = audioCtx.createGain();
+  var gainNode2 = audioCtx.createGain();
+  //set it up
+  oscillator.connect(gainNode);
+  gainNode.connect(audioCtx.destination);
+  gainNode.gain.value = .3;
+  
+  
+  //kinda rough wave form
+  var real = new Float32Array([0.000000,-0.000000,-0.203569,0.500000,-0.401676,0.137128,-0.104117,0.115965,-0.004413,0.067884,-0.008880,0.079300,-0.038756,0.011882,-0.030883,0.027608,-0.013429,0.003930,-0.014029,0.009720,-0.007653,0.007866,-0.032029,0.046127,-0.024155,0.023095,-0.005522,0.004511,-0.003593]);
+  var imag = new Float32Array(real.length);
+  var table = audioCtx.createPeriodicWave(real, imag);
+  
+  oscillator2.connect(gainNode2);
+  gainNode2.connect(audioCtx.destination);
+  gainNode2.gain.value = .2;
+  
+  //oscillator.type = 'sine'; // sine wave — other values are 'square', 'sawtooth', 'triangle' and 'custom'
+  oscillator.setPeriodicWave(hornTable);
+  oscillator.frequency.value = 100; // value in hertz
+  oscillator.start();
+  oscillator.stop(5);
+  setTimeout(function(){ oscillator.frequency.value=80; },2000)
+  
+  oscillator2.type = 'triangle'; // sine wave — other values are 'square', 'sawtooth', 'triangle' and 'custom'
+  oscillator2.frequency.value = 120; // value in hertz
+  oscillator2.start(1);
+  oscillator2.stop(5);
+
+  
+  </script>
+  </head>
+  <body>
+  </body>
+  <script src="ftwist.js"></script>
+</html>

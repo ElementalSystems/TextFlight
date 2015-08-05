@@ -1,11 +1,10 @@
-
 body
 {
   background: #444;
   color: #0F0;
   overflow: hidden;
   font-family: monospace;
-white-space: pre;
+  margin: 0;
 }
 
 #measureme {
@@ -35,12 +34,14 @@ white-space: pre;
 #playframe
 {
   background: #000;  
-  width:100%;
-  height:100%;  
-  position: relative;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   perspective-origin: 50% 40%;
   perspective: 50em;
-  overflow: hidden;
+  margin:0;
 }
 
 #playframe:focus {
@@ -49,23 +50,21 @@ white-space: pre;
 
 #playframe.editmode
 {
-  width: 75%;
+  right: 25%;
+  overflow: hidden;
 }
 
 #playspace
 {
-  margin-left:auto;
-  margin-right:auto;
   overflow: visible;
-  
-  
-  width: 100%;
-  height: 100%;  
-  position: relative;  
+  background: #000;
+  height: 100%;
+  width:100%;  
   transform-style: preserve-3d;
-  transform:  rotateX(70deg);
   transform-origin: 50% 50%;
   z-index: 0;
+  margin: 0;
+  
 }
 
 #statusframe
@@ -79,6 +78,71 @@ white-space: pre;
  font-size: 125%;
  
 }
+
+#startmenu
+{
+ background: rgba(0,0,0,.9);
+ color: #0F0;
+ position: absolute;
+ z-index: 500001;
+ font-size: 75%;
+ overflow-y: auto;
+ top:0;
+ bottom:0;
+ left:0;
+ right:0;
+ display: none;  
+}
+
+#playframe.menumode #startmenu
+{
+  display: block;
+}
+
+#startmenutitle
+{
+ font-size: 150%;
+ float: right;
+ margin-right:2em;
+}
+
+
+
+#endmenu
+{
+ background: rgba(0,0,0,.9);
+ color: #0F0;
+ position: absolute;
+ z-index: 500002;
+ overflow-y: auto;
+ top:0;
+ bottom:0;
+ left:0;
+ right:0;
+ display: none; 
+ padding-left:4em; 
+ padding-top:1em; 
+}
+
+#playframe.endmode #endmenu
+{
+  display: block;
+}
+
+#endmenu h1
+{
+font-size:300%;
+
+}
+
+
+#endmenu a
+{
+   font-size:200%;
+   padding:1em;
+   border: 1px solid #009;
+}
+
 
 .normal_y
 {
@@ -146,11 +210,100 @@ white-space: pre;
   background: #010;
 }
 
+.tut_floor
+{
+  color: #060;
+  background: linear-gradient(to right,#060,#020,#060,#020,#060,#020,#060);
+}
+
+
+.tut_wall
+{
+  color: #CCC;
+  background: linear-gradient(to bottom,#004,#000,#009,#060);
+}
+
+.tut_sign span.solid
+{
+  color: #FFF;
+  background: #000;
+}
+
+.tut_tree span.solid
+{
+  color: #D2691E;
+  background:rgb(139,69,19);
+}
+
+
+.tut_tree span.mark_a
+{
+  color: #0F0;  
+  background: rgba(0,64,0,.3);
+}
+
+.tut_tree span.mark_b
+{
+  color: #F00;  
+  background: rgba(128,0,0,.6);
+}
 
 .floor span.mark_a
 {
  color: #080;
  
+}
+
+.jet_floor
+{
+  color: #006;
+  background: #446;
+}
+
+.jet_floor span.mark_a
+{
+  color: #DDD;
+  background: #111;
+}
+
+
+.jet_floor span.mark_b
+{
+  color: #AAA;
+  background:#002;
+}
+
+
+.jet_floor span.mark_a span.mark_b
+{
+  color: #FF0;
+  background:#111;
+}
+
+.jet_wall span.solid
+{
+   background: #024;
+   color:#08F;
+}
+
+.jet_wall span.solid span.mark_a
+{
+   background: #044;
+   color:#088;
+}
+
+
+.jet_wallalt span.solid
+{
+   background: #042;
+   color:#0F8;
+   
+}
+
+.jet_wallalt span.solid span.mark_a
+{
+   background: #200;
+   color:#800;
 }
 
 .playercraft
@@ -188,4 +341,38 @@ white-space: pre;
 {
    background: rgba(0,0,0,.6);
    color: #000;   
+}
+
+
+.menutitle span
+{
+  color: #0D0;
+}
+
+.menutitle span.mark_a 
+{
+  color: #F00;
+  background: #500;
+}
+
+.menutitle span.mark_b 
+{
+  color: #080;  
+}
+
+.levelbutton
+{
+  float:left;
+  margin-left: 2em;  
+  text-decoration:none;
+  color: #00F;
+  cursor: pointer;
+  font-weight: bolder;
+}
+
+
+.levelbutton:hover
+{
+  color: #55F;
+  background: #003;
 }

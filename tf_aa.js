@@ -12,7 +12,7 @@ function aa_static_addToGame(game,xoff,yoff)
 	if (this.xvar) this.x+=random(0,this.xvar);
 	this.y+=yoff;
 	if (this.yvar) this.y+=random(0,this.yvar);
-	this.z=0;
+	if (!this.z) this.z=0;
 	
 	switch (this.art.normal) {
 		case 'y':
@@ -88,10 +88,57 @@ function aa_aircraft_addToGame(game,xoff,yoff)
 	setElementClass(this.shadowElement,"shadow");
 	game.playspace.appendChild(this.shadowElement);		
 	game.avatar=this;
+	
+	
+	//kinda rough wave form
+    var real = new Float32Array([0.000000,-0.000000,-0.203569,0.500000,-0.401676,0.137128,-0.104117,0.115965,-0.004413,0.067884,-0.008880,0.079300,-0.038756,0.011882,-0.030883,0.027608,-0.013429,0.003930,-0.014029,0.009720,-0.007653,0.007866,-0.032029,0.046127,-0.024155,0.023095,-0.005522,0.004511,-0.003593]);
+    var imag = new Float32Array(real.length);
+    var table = game.audioCtx.createPeriodicWave(real, imag);
+  
+	this.tone1=game.audioCtx.createOscillator();
+    this.gain1 = game.audioCtx.createGain();
+	this.tone1.setPeriodicWave(table); 
+    this.tone1.frequency.value = this.basefreq1; 
+	this.gain1.gain.value=this.basegain1;
+    this.tone1.connect(this.gain1);
+	this.gain1.connect(game.audioCtx.destination);
+    this.tone1.start();
+
+	this.tone2=game.audioCtx.createOscillator();
+    this.gain2 = game.audioCtx.createGain();
+	this.tone2.type = 'triangle'; 
+    this.tone2.frequency.value = this.basefreq2; 
+	this.gain2.gain.value=0;
+    this.tone2.connect(this.gain2);
+	this.gain2.connect(game.audioCtx.destination);
+    this.tone2.start();
+
+	this.tone3=game.audioCtx.createOscillator();
+    this.gain3 = game.audioCtx.createGain();
+	this.tone3.type = 'square'; 
+    this.tone3.frequency.value = 300; 
+	this.gain3.gain.value=0;
+    this.tone3.connect(this.gain3);
+	this.gain3.connect(game.audioCtx.destination);
+	this.tone3.start();
+	
+    this.iscollisionmarked=false;
+
+	
 }
 
 function aa_aircraft_removeFromGame()
 {
+	this.tone1.stop();
+	this.tone1.disconnect()
+	this.gain1.disconnect();
+	this.tone2.stop();
+	this.tone2.disconnect()
+	this.gain2.disconnect();
+	this.tone3.stop();
+	this.tone3.disconnect()
+	this.gain3.disconnect();
+	
 	game.playspace.removeChild(this.mainElement);
 	game.playspace.removeChild(this.secondElement);
 	game.playspace.removeChild(this.shadowElement);
@@ -103,9 +150,10 @@ function aa_aircraft_init()
 	aa_static_init.bind(this)();
 	this.addToGame=aa_aircraft_addToGame;
 	this.removeFromGame=aa_aircraft_removeFromGame;
-	this.z=5;
 	this.deltaz=0;
-	this.deltax=0;
+	this.deltax=0;	
+	
+	
 	
 	this.updateDOM=function(){
 		this.mainElement.style.left=((this.x+this.game.xoffset)*this.game.cwidthinpixels)+"px";
@@ -138,25 +186,43 @@ function aa_aircraft_init()
 		
 		if (game.isKeyDown(87)) { //up
 		  this.deltaz-=this.deltazinc*game.frameTime/1000;
+		  
 		} else if (game.isKeyDown(83)) { //down
 		  this.deltaz+=this.deltazinc*game.frameTime/1000;
-		} else 
+		  
+		} else {
 		  this.deltaz-=(this.deltaz*this.deltazdampen)*game.frameTime/1000;
+		  
+		}
+		
+		this.gain2.gain.value
 		
 		this.deltaz=limitRange(this.deltaz,-this.deltazlimit,+this.deltazlimit);
 		
+		this.gain2.gain.value=(this.deltazlimit+this.deltaz)*this.basegain2/(2*this.deltazlimit);
+		
 		this.z+=this.deltaz*game.frameTime/1000;
 		this.z=limitRange(this.z,2,20);
-	
+		this.tone1.frequency.value=this.basefreq1-this.z;
+		
         this.speed=this.maxspeed-(this.maxspeed-this.minspeed)*(this.z/20)
-		this.y+=this.speed*game.frameTime/1000;
+		this.y+=this.speed*game.speedFactor*game.frameTime/1000;
 		
 		this.recalcBounds();
 		var collisions=this.countCollision();
 		if (collisions>0) {
-			setElementClass(this.mainElement,"danger");
+			this.game.damagetaken+=collisions*20*game.frameTime/1000;
+			if (!this.iscollisionmarked) {
+			  setElementClass(this.mainElement,"danger");
+			  this.gain3.gain.value=1;
+			  this.iscollisionmarked=true;
+			}
 		} else  {
-			unsetElementClass(this.mainElement,"danger");
+			if (this.iscollisionmarked) {
+			  unsetElementClass(this.mainElement,"danger");
+			  this.gain3.gain.value=0;
+			  this.iscollisionmarked=false;
+			}
 		}
 			
 	}
@@ -179,6 +245,8 @@ function aa_aircraft_init()
 		  if (x2<ob.x) continue;
 		  if (x1>ob.xe) continue;	
 		  
+		  var hitCount=0;
+			
           if ((ob.art.normal==='y')&&(ob.art.mark_content)) { //for facing objects with content and spaces
 		    //calculate the row (z difference)
 			var row=Math.floor(ob.ze-zline);
@@ -190,15 +258,16 @@ function aa_aircraft_init()
 			
 			//now go through the text
 			var text=ob.art.textlines[row];
-			var hitCount=0;
 			for (var j=col1;j<=col2;j+=1) 
 				if (text.charAt(j)!=' ') hitCount+=1;
 			
 			if (hitCount==0) continue; //not a real problem!
 						
-          }	
+          }	else {
+			  hitCount=10;
+		  }
 		  
-		  count+=1;		  
+		  count+=hitCount;		  
 		}
 		return count;	
 	}

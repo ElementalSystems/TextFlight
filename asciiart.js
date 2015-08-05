@@ -16,6 +16,7 @@ function asciiart_init()
 	//we will strip an empty line off top and bottom if we find it
 	if (this.textlines[0].length==0) this.textlines.splice(0,1);
 	if (this.textlines[this.textlines.length-1].length==0) this.textlines.splice(this.textlines.length-1,1);	
+
 	
 	//let's try calculate the width and height
 	this.baseheight=this.textlines.length;
@@ -59,7 +60,8 @@ function asciiart_init()
 	
 	
 	//now render the lines into an appropriate pre
-	var t="<pre class='asciiart "+this.sprite_class+" normal_"+this.normal+"'>";
+	if (!this.art_class) this.art_class='asciiart';
+	var t="<pre class='"+this.art_class+" "+this.sprite_class+" normal_"+this.normal+"'>";
     for (var i=0;i<this.height;i+=1) {
 		if (i>0) t+='\n';
 		var cl="asciiline mod2_"+(i%2)+" mod3_"+(i%3);		
